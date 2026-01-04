@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.fft import dctn, idctn
 from src.huffman import HuffmanCoder
+import pickle
 
 # Quantization matrix
 Q_jpeg = [
@@ -53,52 +54,45 @@ class JPEG:
 
         return {
             "bitstream": bitstream,
-            "huffman_table": huff.codes,
             "huff_instance": huff,
             "shape": (self.H, self.W),
+            "Q": self.Q,
+            "block_size": self.block_size,
         }
 
     def decode(self, compressed):
-        bitstream = compressed["bitstream"]
         H, W = compressed["shape"]
-        huff = compressed["huff_instance"]
+        Q = compressed["Q"]
+        block_size = compressed["block_size"]
 
-        # 1) Huffman decode to get quantized coefficients
+        bitstream = compressed["bitstream"]
+        huff = compressed["huff_instance"]
         symbols = huff.decode(bitstream)
 
-        # 2) Determine number of blocks
-        block_size = self.block_size
         blocks_per_row = (W + block_size - 1) // block_size
         blocks_per_col = (H + block_size - 1) // block_size
 
-        # 3) Reconstructed image
-        img_rec = np.zeros((blocks_per_col * block_size, blocks_per_row * block_size))
-
+        img_rec = np.zeros((blocks_per_col * block_size,
+                            blocks_per_row * block_size))
         idx = 0
         for i in range(blocks_per_col):
             for j in range(blocks_per_row):
-                # Extract block of coefficients
-                block_flat = symbols[idx : idx + block_size * block_size]
-                block = np.array(block_flat).reshape((block_size, block_size))
+                block_flat = symbols[idx:idx + block_size * block_size]
                 idx += block_size * block_size
 
-                # 4) De-quantize coefficients
-                block = block * self.Q
-
-                # 5) Inverse DCT to reconstruct block
+                block = np.array(block_flat).reshape((block_size, block_size))
+                block = block * Q
                 block_rec = idctn(block, type=2, norm="ortho")
 
-                # 6) Place block in reconstructed image
                 img_rec[
                     i*block_size:(i+1)*block_size,
                     j*block_size:(j+1)*block_size
                 ] = block_rec
 
-        # 7) Crop to original size and shift pixel values back
         img_rec = img_rec[:H, :W] + 128
         img_rec = np.clip(np.round(img_rec), 0, 255).astype(np.uint8)
-
         return img_rec
+
 
     def compare(self, compressed):
         orig_bits = self.H * self.W * 8                  
@@ -119,3 +113,19 @@ class JPEG:
             "psnr": psnr,
             "reconstructed_image": rec,
         }
+        
+    def encode_to_file(self, filepath):
+        compressed = self.encode()
+        with open(filepath, "wb") as f:
+            pickle.dump(compressed, f)
+            
+    def decode_from_file(self, filepath):
+        with open(filepath, "rb") as f:
+            compressed = pickle.load(f)
+
+        dummy = JPEG(
+            original=np.zeros(compressed["shape"], dtype=np.uint8),
+            Q_matrix=compressed["Q"]
+        )
+        
+        return dummy.decode(compressed)

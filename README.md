@@ -68,6 +68,13 @@ Comparing a frame from the clip:
 
 ![./output/plots/video_comparison.png](./output/plots/video_comparison.png)
 
+## Saving files 
+A JPEG files contains:
+    - Header (has data about the huffman tree, image dimensions and quantization matrix)
+    - Huffman encoded symbols
+
+I save the encoded files with `.myjpeg` extension.
+
 ## Python environment
 ```bash
 python3 -m venv venv
