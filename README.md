@@ -64,6 +64,10 @@ From a given video, we extract every frame, treat every frame as an rgb image an
 Input video is at `assets/mp4/video.mp4`
 Output video is at `output/output.mp4`
 
+Comparing a frame from the clip:
+
+![./output/plots/video_comparison.png](./output/plots/video_comparison.png)
+
 ## Python environment
 ```bash
 python3 -m venv venv

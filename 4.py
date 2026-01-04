@@ -1,6 +1,6 @@
 # compress video
 import cv2 
-import numpy as np
+import matplotlib.pyplot as plt
 from src.rgb_jpeg import RGBJPEG
 
 def extract_frames(video_path):
@@ -49,3 +49,24 @@ if __name__ == '__main__':
     build_video(encoded_frames, output_path)
     
     print(f"Saved encoded video as {output_path}")
+    
+    frame_no = 15
+    raw_frame = frames[frame_no]
+    compressed_frame = encoded_frames[frame_no]
+    
+    # ----- plotting -----
+    plt.figure(figsize=(12, 10))
+    
+    # zoom-in
+    plt.subplot(1, 2, 1)
+    plt.title(f"Original frame no. {frame_no}")
+    plt.imshow(raw_frame)
+    plt.axis("off")
+
+    plt.subplot(1, 2, 2)
+    plt.title(f"Compressed frame no. {frame_no}")
+    plt.imshow(compressed_frame)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.savefig('./output/plots/video_comparison.png')
+    plt.show()
