@@ -37,11 +37,11 @@ def encode_to_target_mse(original_image, target_mse, max_iter=20, tol=0.01):
 
 if __name__ == '__main__':
     # load the image
-    image_path = "./assets/png/boat.png"
+    image_path = "./assets/png/clouds.png"
     image = Image.open(image_path).convert('RGB')
     rgb_image = np.array(image)[0:512, 0:512]
     
-    target_mse = 17
+    target_mse = 30
     print(f'Finding scale for target mse={target_mse}...')
     compressed, scale, mse = encode_to_target_mse(rgb_image, target_mse)
     
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     # ----- plotting -----
     rec_image = comparison["reconstructed_image"]
-    w_x, w_y, zoom_x, zoom_y = 100, 100, 340, 200
+    w_x, w_y, zoom_x, zoom_y = 100, 100, 100, 100
     plt.figure(figsize=(12, 10))
     
     # zoom-in
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     plt.imshow(rec_image[zoom_x : zoom_x + w_x, zoom_y : zoom_y + w_y])
     plt.axis("off")
     plt.tight_layout()
-    plt.savefig('./output/plots/mse_.png')
+    plt.savefig('./output/plots/mse_30_clouds.png')
     plt.show()
     
     

@@ -10,7 +10,7 @@ def grayscale():
     image = Image.open(image_path)
     gray_image = np.array(image.convert("L"))
     
-    gray_image = np.array(gray_image)[100:612, 0:512]
+    gray_image = np.array(gray_image)
 
     # encode the image and compare
     jpeg = JPEG(gray_image)
@@ -29,29 +29,41 @@ def grayscale():
     plt.figure(figsize=(12, 10))
 
     # ----- plotting -----
-    plt.subplot(2, 2, 1)
+    plt.subplot(2, 3, 1)
     plt.title("Original")
     plt.imshow(gray_image, cmap="gray")
     plt.axis("off")
 
-    plt.subplot(2, 2, 2)
+    plt.subplot(2, 3, 2)
     plt.title(f"Reconstructed\nMSE: {comparison['mse']:.2f}")
     plt.imshow(reconstructed, cmap="gray")
     plt.axis("off")
+    
+    plt.subplot(2, 3, 3)
+    plt.title("Difference")
+    diff = np.abs(gray_image.astype(float) - reconstructed.astype(float))
+    plt.imshow(diff, cmap="inferno")
+    plt.axis("off")
 
     # zoom-in
-    plt.subplot(2, 2, 3)
+    plt.subplot(2, 3, 4)
     plt.title("Original (zoomed)")
     plt.imshow(gray_image[zoom_x : zoom_x + w_x, zoom_y : zoom_y + w_y], cmap="gray")
     plt.axis("off")
 
-    plt.subplot(2, 2, 4)
+    plt.subplot(2, 3, 5)
     plt.title(f"Reconstructed\nMSE: {comparison['mse']:.2f} (zoomed)")
     plt.imshow(reconstructed[zoom_x : zoom_x + w_x, zoom_y : zoom_y + w_y], cmap="gray")
     plt.axis("off")
+    
+    plt.subplot(2, 3, 6)
+    plt.title("Difference")
+    diff = np.abs(gray_image.astype(float) - reconstructed.astype(float))
+    plt.imshow(diff[zoom_x : zoom_x + w_x, zoom_y : zoom_y + w_y], cmap="inferno")
+    plt.axis("off")
+
     plt.tight_layout()
     plt.savefig('./output/plots/grayscale.png')
-    
     plt.show()
 
 

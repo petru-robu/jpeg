@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 from scipy.fft import dctn, idctn
 from src.huffman import HuffmanCoder
 
@@ -126,3 +127,28 @@ class RGBJPEG:
             "psnr": psnr,
             "reconstructed_image": rec
         }
+        
+    def encode_to_file(self, filepath):
+        compressed = self.encode()
+        payload = {
+            "compressed": compressed,
+            "shape": (self.H, self.W),
+            "Q": self.Q,
+            "block_size": self.block_size
+        }
+        with open(filepath, "wb") as f:
+            pickle.dump(payload, f)
+
+    def decode_from_file(self, filepath):
+        with open(filepath, "rb") as f:
+            payload = pickle.load(f)
+
+        compressed = payload["compressed"]
+
+        dummy = RGBJPEG(
+            original=np.zeros((payload["shape"][0],
+                               payload["shape"][1], 3), dtype=np.uint8),
+            Q_matrix=payload["Q"]
+        )
+        dummy.block_size = payload["block_size"]
+        return dummy.decode(compressed)

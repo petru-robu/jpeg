@@ -37,7 +37,8 @@ Steps:
 
 Results:
 
-![output/plots/rgb.png](output/plots/rgb.png)
+![output/plots/rgb.png](output/plots/rgb_bumblebee.png)
+![output/plots/rgb.png](output/plots/rgb_clouds.png)
 
 Compression metrics: 
 ```bash
@@ -56,6 +57,8 @@ Results:
 
 ![output/plots/mse_50.png](output/plots/mse_50.png)
 ![output/plots/mse_17.png](output/plots/mse_17.png)
+![output/plots/mse_30_clouds.png](output/plots/mse_30_clouds.png)
+
 
 ## Video compression
 
@@ -68,10 +71,10 @@ Comparing a frame from the clip:
 
 ![./output/plots/video_comparison.png](./output/plots/video_comparison.png)
 
-## Saving files 
-A JPEG files contains:
-    - Header (has data about the huffman tree, image dimensions and quantization matrix)
-    - Huffman encoded symbols
+## Saving files
+My JPEG files contain:
+- Header (has data about the huffman tree, image dimensions and quantization matrix)
+- Huffman encoded symbols
 
 I save the encoded files with `.myjpeg` extension.
 

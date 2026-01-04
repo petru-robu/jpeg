@@ -4,18 +4,19 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 from src.jpeg import JPEG
+from src.rgb_jpeg import RGBJPEG
 
-if __name__ == "__main__":
+def grayscale_save():
     # load the image
-    image_path = "./assets/png/boat.png"
+    image_path = "./assets/png/bumblebee.png"
     image = Image.open(image_path)
     gray_image = np.array(image.convert("L"))
     
-    save_path = "./output/myjpeg/boat.myjpeg"
+    save_path = "./output/myjpeg/bumblebee.myjpeg"
     
     # encode and save
     jpeg = JPEG(gray_image)
-    jpeg.Q *= 2
+    # jpeg.Q *= 2
     jpeg.encode_to_file(save_path)
     print(f"Encoding complete. File saved as {save_path}")
 
@@ -37,6 +38,44 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
+
+def rgb_save():
+    # load the image
+    image_path = "./assets/png/bumblebee.png"
+    image = Image.open(image_path)
+    rgb_image = np.array(image)
+    
+    save_path = "./output/myjpeg/bumblebee.myjpeg"
+    
+    # encode and save
+    rgb_jpeg = RGBJPEG(rgb_image)
+    # jpeg.Q *= 2
+    rgb_jpeg.encode_to_file(save_path)
+    print(f"Encoding complete. File saved as {save_path}")
+
+    # decode from file
+    reconstructed = rgb_jpeg.decode_from_file(save_path)
+
+    print("Decoding complete.")
+    # plotting
+    plt.figure(figsize=(12, 10))
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(rgb_image, cmap="gray")
+    plt.axis("off")
+
+    plt.subplot(1, 2, 2)
+    plt.title("Reconstructed")
+    plt.imshow(reconstructed, cmap="gray")
+    plt.axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+
+if __name__ == "__main__":
+    grayscale_save()
+    rgb_save()
 
     
 
