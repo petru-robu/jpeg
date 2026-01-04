@@ -1,8 +1,6 @@
 # JPEG Coder
 JPEG format implementation in python.
 
----
-
 ## Encode grayscale images
 Steps:
 
@@ -32,9 +30,6 @@ Compression ratio: 5.085267622140779
 Bits per pixel: 1.573171875
 PSNR: 34.24600523967972
 ```
-
----
-
 ## Encode RGB images
 Steps:
     - Convert an RGB image to YCrCb
@@ -53,8 +48,6 @@ Bits per pixel: 3.78232421875
 PSNR: 33.45418544207216
 ```
 
---- 
-
 ## Encode image to obtain a target MSE
 
 To get a target MSE we can scale the quantization matrix. We can do a binary search to find the number required to obtain that MSE.
@@ -64,7 +57,6 @@ Results:
 ![output/plots/mse_50.png](output/plots/mse_50.png)
 ![output/plots/mse_17.png](output/plots/mse_17.png)
 
----
 ## Video compression
 
 From a given video, we extract every frame, treat every frame as an rgb image and then stack the frames to obtain a compressed image.
@@ -72,7 +64,6 @@ From a given video, we extract every frame, treat every frame as an rgb image an
 Input video is at `assets/mp4/video.mp4`
 Output video is at `output/output.mp4`
 
----
 ## Python environment
 ```bash
 python3 -m venv venv
